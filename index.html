@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Master Pro - Free Typing Tutor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<div id="topbar">
+  <div class="logo">
+    <span class="logo-icon">⌨</span>
+    <span class="logo-text">Typing Master <em>Pro</em></span>
+  </div>
+  <div id="top-stats" class="hidden">
+    <div class="tstat"><span class="tlabel">WPM</span><span class="tval" id="t-wpm">0</span></div>
+    <div class="tstat"><span class="tlabel">Accuracy</span><span class="tval" id="t-acc">100%</span></div>
+    <div class="tstat"><span class="tlabel">Time</span><span class="tval" id="t-time">0:00</span></div>
+    <div class="tstat"><span class="tlabel">Progress</span><span class="tval" id="t-prog">0%</span></div>
+  </div>
+  <div class="top-btns">
+    <button id="btn-theme" class="icon-btn" title="Toggle Theme">🌙</button>
+    <button id="btn-sound" class="icon-btn" title="Sound On/Off">🔊</button>
+    <button id="btn-home" class="icon-btn hidden" title="Home">🏠</button>
+    <button id="btn-keys" class="icon-btn" title="Show Keyboard">⌨</button>
+  </div>
+</div>
+
+<!-- ============ HOME SCREEN ============ -->
+<div id="screen-home" class="screen active">
+
+  <!-- Welcome strip -->
+  <div class="welcome-strip">
+    <h1>Learn to Type Like a Pro</h1>
+    <p>12 structured lessons • Home row to full keyboard • Real-time feedback</p>
+    <div class="welcome-btns">
+      <button class="big-btn primary" id="btn-continue">▶ Continue Course</button>
+      <button class="big-btn" id="btn-free-practice">⌨ Free Practice</button>
+    </div>
+  </div>
+
+  <div class="home-grid">
+    <!-- Course list -->
+    <div class="course-panel">
+      <div class="panel-title">Course Lessons</div>
+      <div id="lesson-list"></div>
+    </div>
+
+    <!-- Right column -->
+    <div class="side-col">
+      <div class="stat-card">
+        <div class="panel-title">Your Progress</div>
+        <div class="progress-ring-wrap">
+          <svg id="course-ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>
+          </svg>
+          <div class="ring-text"><b id="ring-pct">0%</b><span>Complete</span></div>
+        </div>
+        <div class="mini-stats">
+          <div class="mini"><span class="mv" id="s-best-wpm">0</span><span class="ml">Best WPM</span></div>
+          <div class="mini"><span class="mv" id="s-avg-wpm">0</span><span class="ml">Avg WPM</span></div>
+          <div class="mini"><span class="mv" id="s-lessons-done">0</span><span class="ml">Lessons</span></div>
+          <div class="mini"><span class="mv" id="s-total-time">0m</span><span class="ml">Practice</span></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="panel-title">Drill Types</div>
+        <div class="drill-grid">
+          <button class="drill" data-drill="keydrill">🎯 Key Drill<small>Single key focus</small></button>
+          <button class="drill" data-drill="common">🔤 Common Words<small>Top 200 words</small></button>
+          <button class="drill" data-drill="sentences">📜 Sentences<small>Real text</small></button>
+          <button class="drill" data-drill="punctuation">✏️ Punctuation<small>Commas, periods</small></button>
+          <button class="drill" data-drill="numbers">🔢 Numbers<small>Number row</small></button>
+          <button class="drill" data-drill="quotes">💬 Famous Quotes<small>Longer passages</small></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LESSON SCREEN (typing) ============ -->
+<div id="screen-lesson" class="screen">
+
+  <div class="lesson-head">
+    <button id="btn-exit" class="ghost-btn">✕ Exit</button>
+    <div class="lesson-title" id="lesson-title">Lesson</div>
+    <div class="lesson-mode-badge" id="mode-badge">Lesson</div>
+  </div>
+
+  <!-- Progress dots -->
+  <div class="chunk-dots" id="chunk-dots"></div>
+
+  <!-- Typing area - TypingMaster style boxes -->
+  <div class="type-area" id="type-area">
+    <div class="tm-row" id="tm-row-0"></div>
+    <div class="tm-row" id="tm-row-1"></div>
+    <div class="tm-row" id="tm-row-2"></div>
+  </div>
+
+  <!-- Hidden input that captures keystrokes -->
+  <input id="typer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+
+  <!-- Visual keyboard -->
+  <div class="keyboard" id="keyboard">
+    <div class="krow" data-row="0">
+      <div class="key" data-k="`">`<span>~</span></div>
+      <div class="key" data-k="1">1<span>!</span></div>
+      <div class="key" data-k="2">2<span>@</span></div>
+      <div class="key" data-k="3">3<span>#</span></div>
+      <div class="key" data-k="4">4<span>$</span></div>
+      <div class="key" data-k="5">5<span>%</span></div>
+      <div class="key" data-k="6">6<span>^</span></div>
+      <div class="key" data-k="7">7<span>&amp;</span></div>
+      <div class="key" data-k="8">8<span>*</span></div>
+      <div class="key" data-k="9">9<span>(</span></div>
+      <div class="key" data-k="0">0<span>)</span></div>
+      <div class="key" data-k="-">-<span>_</span></div>
+      <div class="key" data-k="=">=<span>+</span></div>
+      <div class="key wide" data-k="Backspace">⌫</div>
+    </div>
+    <div class="krow" data-row="1">
+      <div class="key tab" data-k="Tab">Tab</div>
+      <div class="key home" data-k="q">Q</div>
+      <div class="key home" data-k="w">W</div>
+      <div class="key home" data-k="e">E</div>
+      <div class="key home" data-k="r">R</div>
+      <div class="key home" data-k="t">T</div>
+      <div class="key home" data-k="y">Y</div>
+      <div class="key home" data-k="u">U</div>
+      <div class="key home" data-k="i">I</div>
+      <div class="key home" data-k="o">O</div>
+      <div class="key home" data-k="p">P</div>
+      <div class="key home" data-k="[">[<span>{</span></div>
+      <div class="key home" data-k="]">]<span>}</span></div>
+      <div class="key home" data-k="\">\<span>|</span></div>
+    </div>
+    <div class="krow" data-row="2">
+      <div class="key caps" data-k="CapsLock">Caps</div>
+      <div class="key home" data-k="a">A</div>
+      <div class="key home" data-k="s">S</div>
+      <div class="key home" data-k="d">D</div>
+      <div class="key home" data-k="f">F<span class="bump"></span></div>
+      <div class="key home" data-k="g">G</div>
+      <div class="key home" data-k="h">H</div>
+      <div class="key home" data-k="j">J<span class="bump"></span></div>
+      <div class="key home" data-k="k">K</div>
+      <div class="key home" data-k="l">L</div>
+      <div class="key home" data-k=";">;<span>:</span></div>
+      <div class="key home" data-k="'">'<span>"</span></div>
+      <div class="key enter" data-k="Enter">Enter</div>
+    </div>
+    <div class="krow" data-row="3">
+      <div class="key shift" data-k="Shift">Shift</div>
+      <div class="key home" data-k="z">Z</div>
+      <div class="key home" data-k="x">X</div>
+      <div class="key home" data-k="c">C</div>
+      <div class="key home" data-k="v">V</div>
+      <div class="key home" data-k="b">B</div>
+      <div class="key home" data-k="n">N</div>
+      <div class="key home" data-k="m">M</div>
+      <div class="key home" data-k=",">,<span>&lt;</span></div>
+      <div class="key home" data-k=".">.<span>&gt;</span></div>
+      <div class="key home" data-k="/">/<span>?</span></div>
+      <div class="key shift" data-k="Shift">Shift</div>
+    </div>
+    <div class="krow" data-row="4">
+      <div class="key space" data-k=" ">Space</div>
+    </div>
+  </div>
+
+  <!-- Finger guide -->
+  <div class="finger-guide" id="finger-guide">
+    <span class="fg left-pinky">Left<br>Pinky</span>
+    <span class="fg left-ring">Left<br>Ring</span>
+    <span class="fg left-mid">Left<br>Middle</span>
+    <span class="fg left-index">Left<br>Index</span>
+    <span class="fg right-index">Right<br>Index</span>
+    <span class="fg right-mid">Right<br>Middle</span>
+    <span class="fg right-ring">Right<br>Ring</span>
+    <span class="fg right-pinky">Right<br>Pinky</span>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="result-card">
+    <div class="result-header">
+      <div class="result-emoji" id="res-emoji">🎉</div>
+      <h2 id="res-title">Lesson Complete!</h2>
+      <p id="res-sub">Great job finishing this lesson</p>
+    </div>
+
+    <div class="result-grid">
+      <div class="r-big">
+        <div class="rb-num" id="res-wpm">0</div>
+        <div class="rb-lab">Words Per Minute</div>
+      </div>
+      <div class="r-big">
+        <div class="rb-num" id="res-acc">0%</div>
+        <div class="rb-lab">Accuracy</div>
+      </div>
+      <div class="r-big">
+        <div class="rb-num" id="res-time">0:00</div>
+        <div class="rb-lab">Time Taken</div>
+      </div>
+    </div>
+
+    <div class="result-detail" id="res-detail"></div>
+
+    <!-- Key problem areas -->
+    <div class="weak-keys-wrap" id="weak-keys-wrap">
+      <div class="panel-title">Keys to Practice More</div>
+      <div class="weak-keys" id="weak-keys"></div>
+    </div>
+
+    <div class="result-stars" id="res-stars">★ ★ ★</div>
+
+    <div class="result-btns">
+      <button class="big-btn" id="btn-retry">🔁 Retry Lesson</button>
+      <button class="big-btn primary" id="btn-next">Next Lesson ▶</button>
+      <button class="big-btn ghost" id="btn-back-home">🏠 Back to Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FREE PRACTICE SETUP ============ -->
+<div id="screen-practice" class="screen">
+  <div class="practice-card">
+    <h2>⌨ Free Practice</h2>
+    <p class="pr-sub">Apni marzi se text practice karein</p>
+
+    <div class="pr-options">
+      <div class="pr-opt">
+        <label>Text Source</label>
+        <div class="pr-src-btns">
+          <button class="src-btn active" data-src="random">🎲 Random Words</button>
+          <button class="src-btn" data-src="sentences">📜 Sentences</button>
+          <button class="src-btn" data-src="custom">📝 Custom Text</button>
+        </div>
+      </div>
+
+      <div class="pr-opt" id="opt-custom" style="display:none">
+        <label>Paste your text here</label>
+        <textarea id="custom-text" placeholder="Yahan apna text paste karein..."></textarea>
+      </div>
+
+      <div class="pr-row">
+        <div class="pr-opt">
+          <label>Duration</label>
+          <select id="pr-duration">
+            <option value="30">30 seconds</option>
+            <option value="60" selected>1 minute</option>
+            <option value="120">2 minutes</option>
+            <option value="180">3 minutes</option>
+            <option value="0">No limit (text ends)</option>
+          </select>
+        </div>
+        <div class="pr-opt">
+          <label>Difficulty</label>
+          <select id="pr-difficulty">
+            <option value="easy">Easy (home row)</option>
+            <option value="medium" selected>Medium (common words)</option>
+            <option value="hard">Hard (full text)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-btns">
+      <button class="big-btn ghost" id="btn-pr-cancel">Cancel</button>
+      <button class="big-btn primary" id="btn-pr-start">▶ Start Practice</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ KEYBOARD TOGGLE SCREEN (help) ============ -->
+<div id="screen-keys" class="screen">
+  <div class="keys-card">
+    <h2>⌨ Keyboard Layout & Finger Guide</h2>
+    <p>Har key ko sahi ungli se dabayein. Neeche colors dikhate hain kaunsi ungli kis key par jaye:</p>
+
+    <div class="finger-map">
+      <div class="fm-legend">
+        <span><i style="background:#e74c3c"></i> Pinky</span>
+        <span><i style="background:#f39c12"></i> Ring Finger</span>
+        <span><i style="background:#2ecc71"></i> Middle Finger</span>
+        <span><i style="background:#3498db"></i> Index Finger</span>
+        <span><i style="background:#9b59b6"></i> Thumb (Space)</span>
+      </div>
+      <div class="keyboard legend-kb">
+        <div class="krow">
+          <div class="key" style="background:#e74c3c">`</div>
+          <div class="key" style="background:#e74c3c">1</div>
+          <div class="key" style="background:#e74c3c">2</div>
+          <div class="key" style="background:#f39c12">3</div>
+          <div class="key" style="background:#2ecc71">4</div>
+          <div class="key" style="background:#2ecc71">5</div>
+          <div class="key" style="background:#3498db">6</div>
+          <div class="key" style="background:#3498db">7</div>
+          <div class="key" style="background:#3498db">8</div>
+          <div class="key" style="background:#2ecc71">9</div>
+          <div class="key" style="background:#f39c12">0</div>
+          <div class="key" style="background:#e74c3c">-</div>
+          <div class="key" style="background:#e74c3c">=</div>
+          <div class="key wide" style="background:#e74c3c">⌫</div>
+        </div>
+        <div class="krow">
+          <div class="key tab" style="background:#e74c3c">Tab</div>
+          <div class="key" style="background:#e74c3c">Q</div>
+          <div class="key" style="background:#f39c12">W</div>
+          <div class="key" style="background:#2ecc71">E</div>
+          <div class="key" style="background:#3498db">R</div>
+          <div class="key" style="background:#3498db">T</div>
+          <div class="key" style="background:#3498db">Y</div>
+          <div class="key" style="background:#3498db">U</div>
+          <div class="key" style="background:#2ecc71">I</div>
+          <div class="key" style="background:#f39c12">O</div>
+          <div class="key" style="background:#e74c3c">P</div>
+          <div class="key" style="background:#e74c3c">[</div>
+          <div class="key" style="background:#e74c3c">]</div>
+          <div class="key" style="background:#e74c3c">\</div>
+        </div>
+        <div class="krow">
+          <div class="key caps" style="background:#e74c3c">Caps</div>
+          <div class="key" style="background:#e74c3c">A</div>
+          <div class="key" style="background:#f39c12">S</div>
+          <div class="key" style="background:#2ecc71">D</div>
+          <div class="key" style="background:#3498db">F</div>
+          <div class="key" style="background:#3498db">G</div>
+          <div class="key" style="background:#3498db">H</div>
+          <div class="key" style="background:#3498db">J</div>
+          <div class="key" style="background:#2ecc71">K</div>
+          <div class="key" style="background:#f39c12">L</div>
+          <div class="key" style="background:#e74c3c">;</div>
+          <div class="key" style="background:#e74c3c">'</div>
+          <div class="key enter" style="background:#e74c3c">Enter</div>
+        </div>
+        <div class="krow">
+          <div class="key shift" style="background:#e74c3c">Shift</div>
+          <div class="key" style="background:#e74c3c">Z</div>
+          <div class="key" style="background:#f39c12">X</div>
+          <div class="key" style="background:#2ecc71">C</div>
+          <div class="key" style="background:#3498db">V</div>
+          <div class="key" style="background:#3498db">B</div>
+          <div class="key" style="background:#3498db">N</div>
+          <div class="key" style="background:#2ecc71">M</div>
+          <div class="key" style="background:#f39c12">,</div>
+          <div class="key" style="background:#3498db">.</div>
+          <div class="key" style="background:#2ecc71">/</div>
+          <div class="key shift" style="background:#e74c3c">Shift</div>
+        </div>
+        <div class="krow">
+          <div class="key space" style="background:#9b59b6">Space</div>
+        </div>
+      </div>
+
+      <div class="home-row-tip">
+        <b>Home Row:</b> Left hand → A S D F &nbsp;|&nbsp; Right hand → J K L ;<br>
+        <b>Note:</b> F aur J keys par chhota bump (उभार) hota hai - ungli wahan rakhein.
+      </div>
+    </div>
+
+    <button class="big-btn primary" id="btn-keys-back">Back to Menu</button>
+  </div>
+</div>
+
+<!-- ============ OVERLAYS ============ -->
+<div id="countdown-overlay" class="overlay hidden">
+  <div id="countdown-num">3</div>
+  <div id="countdown-hint">Get Ready...</div>
+</div>
+
+<div id="pause-overlay" class="overlay hidden">
+  <div class="pause-box">
+    <h2>⏸ Paused</h2>
+    <button class="big-btn primary" id="btn-resume">▶ Resume</button>
+    <button class="big-btn" id="btn-restart">🔁 Restart</button>
+    <button class="big-btn ghost" id="btn-quit">✕ Quit Lesson</button>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="lessons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
